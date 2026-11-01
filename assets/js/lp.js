@@ -1,7 +1,7 @@
 // Página de vendas — Método dos 4 Ciclos para 2027
 
-// Link do checkout. Enquanto estiver vazio, os botões de compra ficam em "#checkout".
-const CHECKOUT_URL = '';
+// Link do checkout (Wiapy). Os botões já levam a ele direto no HTML; aqui ele ganha os parâmetros do anúncio.
+const CHECKOUT_URL = 'https://pay.wiapy.com/U4RCOzplknCc';
 // Preço exibido na página (bloco da oferta e barra fixa).
 const PRECO = '19,90';
 
@@ -16,6 +16,11 @@ if (CHECKOUT_URL) {
   params.forEach((v, k) => { if (!url.searchParams.has(k)) url.searchParams.set(k, v); });
   document.querySelectorAll('.js-checkout').forEach(a => { a.href = url.toString(); });
 }
+
+// Clique em comprar: evento do GA4 (begin_checkout). O evento equivalente da Meta fica a cargo do pixel da UTMify.
+document.querySelectorAll('.js-checkout').forEach(a => a.addEventListener('click', () => {
+  try { if (window.gtag) gtag('event', 'begin_checkout', { currency: 'BRL', value: 19.90 }); } catch (e) {}
+}));
 
 // 3. Contagem real até o próximo começo de ciclo (sem números inventados).
 //    Antes de 2027: dias até 1º de janeiro. Durante 2027: o próximo recomeço (abr, jul, out).
